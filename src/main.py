@@ -15,8 +15,18 @@ from recommender import load_songs, recommend_songs
 def main() -> None:
     songs = load_songs("data/songs.csv") 
 
-    # Starter example profile
-    user_prefs = {"genre": "pop", "mood": "happy", "energy": 0.8}
+    # User taste profile — values must match feature ranges in songs.csv
+    # Categorical: favorite_genre and favorite_mood must match a value in the dataset
+    # Numeric:     target_energy, target_valence, target_danceability all 0.0–1.0
+    # Boolean:     likes_acoustic — True favors high acousticness, False favors electronic
+    user_prefs = {
+        "favorite_genre":      "pop",   # matched against song["genre"]
+        "favorite_mood":       "happy", # matched against song["mood"]
+        "target_energy":       0.80,    # prefers high-energy tracks
+        "target_valence":      0.78,    # prefers bright, positive-sounding music
+        "target_danceability": 0.80,    # prefers tracks easy to move to
+        "likes_acoustic":      False,   # prefers electronic/produced sound
+    }
 
     recommendations = recommend_songs(user_prefs, songs, k=5)
 
@@ -32,3 +42,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+    input("\nPress Enter to exit...")
