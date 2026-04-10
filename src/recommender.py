@@ -39,10 +39,12 @@ class Recommender:
         self.songs = songs
 
     def recommend(self, user: UserProfile, k: int = 5) -> List[Song]:
+        """Return the top-k songs ranked by compatibility with the given user profile."""
         # TODO: Implement recommendation logic
         return self.songs[:k]
 
     def explain_recommendation(self, user: UserProfile, song: Song) -> str:
+        """Return a human-readable string explaining why a song was recommended to the user."""
         # TODO: Implement explanation logic
         return "Explanation placeholder"
 
@@ -118,6 +120,9 @@ def recommend_songs(user_prefs: Dict, songs: List[Dict], k: int = 5) -> List[Tup
     Functional implementation of the recommendation logic.
     Required by src/main.py
     """
-    # TODO: Implement scoring and ranking logic
-    # Expected return format: (song_dict, score, explanation)
-    return []
+    scored = [
+        (song, score, reasons if reasons else ["no strong matches found"])
+        for song in songs
+        for score, reasons in [score_song(user_prefs, song)]
+    ]
+    return sorted(scored, key=lambda x: x[1], reverse=True)[:k]
